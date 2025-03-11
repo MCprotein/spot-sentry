@@ -8,3 +8,11 @@ resource "aws_s3_bucket_versioning" "main" {
     status = "Enabled"
   }
 }
+
+terraform {
+  backend "s3" {
+    bucket = "tfstate-spot-sentry"
+    key    = "terraform/terraform.tfstate"
+    region = "ap-northeast-2"
+  }
+}
