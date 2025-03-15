@@ -8,7 +8,7 @@ resource "aws_vpc" "main" {
 resource "aws_subnet" "first_subnet" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = "10.0.2.0/24"
-  availability_zone = "ap-northeast-2b"
+  availability_zone = "ap-northeast-2c"
   tags = {
     Name = "aws_subnet_first"
   }
@@ -31,4 +31,16 @@ resource "aws_route_table" "main" {
 resource "aws_route_table_association" "first" {
   subnet_id      = aws_subnet.first_subnet.id
   route_table_id = aws_route_table.main.id
+}
+
+resource "aws_network_interface" "sentry" {
+  subnet_id = aws_subnet.first_subnet.id
+  tags = {
+    Name = "aws_network_interface_sentry"
+  }
+}
+
+resource "aws_eip" "sentry" {
+  domain            = "vpc"
+  network_interface = aws_network_interface.sentry.id
 }
